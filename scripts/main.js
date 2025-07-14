@@ -9,31 +9,52 @@ function getMousePos(canvas, evt) {
 function init() {
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
-    const img1 = document.getElementById("source")
-    let pos = [10, 10]
-    
+    ctx.imageSmoothingEnabled = true; 
+    ctx.imageSmoothingQuality = "high"
+    const img1 = new Image(100,100)
+    img1.src = "../circle.png"
+    let objects = [
+        {
+            name: "player",
+            position: [10,10],
+            size: [25, 25],
+            img: new Image(100,100),
+            src: "../circle.png"
+        },
+        {
+            name: "circle",
+            position: [100,10],
+            size: [25, 25],
+            img: new Image(100,100),
+            src: "../circle.png"
+        }
+    ]
+    let player = objects[0]
     function start() {
-        ctx.drawImage(img1, 10, 10, 10, 10);
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         window.addEventListener("keypress", function (e) {
             if (e.key == "d") {
-                pos = [pos[0] + 15, pos[1]]
+                player.position = [player.position[0] + 15, player.position[1]]
             }
             if (e.key == "a") {
-                pos = [pos[0] - 15, pos[1]]
+                player.position = [player.position[0] - 15, player.position[1]]
             }
             if (e.key == "w") {
-                pos = [pos[0], pos[1] - 15]
+                player.position = [player.position[0], player.position[1] - 15]
             }
             if (e.key == "s") {
-                pos = [pos[0], pos[1] + 15]
+                player.position = [player.position[0], player.position[1] + 15]
             }
         })
     }
     function update() {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
-        ctx.drawImage(img1, pos[0], pos[1], 10, 10);
 
+        for (let i = 0; i < objects.length; i++) {
+            const object = objects[i]
+            object.img.src = object.src
+            ctx.drawImage(object.img, object.position[0], object.position[1], object.size[0], object.size[1]);
+        }
     }
     start()
     setInterval(update, 1);
